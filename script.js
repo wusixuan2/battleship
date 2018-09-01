@@ -4,15 +4,18 @@ function instructionMsg() {
 function createTenByTenBoard(num) {
   var rowOpen = "<tr>\n";
   var rowClose = "</tr>\n";
-  var cellOpen = "<td class='cell' id=";
-  var cellClose = "></td>\n";
+  var cellOpen = "<td class='cell' row=";
+  var cellClose = "'></td>\n";
   var tableContent = `<table class='table${num}'>\n`; //
   for(var i = 0; i < 10; i++) {
     tableContent += rowOpen;
     for(var j = 0; j < 10; j++) {
       var row = cellOpen;
-      var index = i*10 + j;
-      row += index += cellClose;
+      row += i;
+      var col = " col='";
+      var letter = String.fromCharCode(65+j);
+      row += col += letter;
+      row += cellClose;
       tableContent += row;
     }
     tableContent += rowClose;
