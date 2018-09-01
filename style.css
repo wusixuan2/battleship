@@ -1,0 +1,26 @@
+td {
+  border:  2px solid #333;
+  height:  40px;
+  width:  40px;
+  text-align:  center;
+  vertical-align:  middle;
+  font-family:  "Comic Sans MS", cursive, sans-serif;
+  font-size:  10px;
+  cursor: pointer;
+}
+
+.table1 {
+  border-collapse: collapse;
+  position: absolute;
+  left: 20%;
+  margin-left: -155px;
+  top: 100px;
+}
+
+.table2 {
+  border-collapse: collapse;
+  position: absolute;
+  left: 65%;
+  margin-left: -155px;
+  top: 100px;
+}
