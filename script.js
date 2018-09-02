@@ -20,7 +20,7 @@ function createTenByTenBoard(num) {
     tableContent += rowClose;
   }
   tableContent += "</table>\n";
-  console.log(tableContent);
+
   return tableContent;
 }
 function htmlToElement(html) {
@@ -36,40 +36,69 @@ document.getElementById("board2").appendChild(board2);
 const cells = document.querySelectorAll('.cell');
 const hit = 'H';
 const miss = 'O';
-var myShip = {
+var shipList = {
   shipFive: {
     length: 5,
-    location:[[],[],[],[],[]] //array of coordinate
+    location:[] //array of coordinate 5 string
   },
   shipFour: {
     length: 4,
-    location:[[],[],[],[]]
+    location:[] //array of 4 string
   },
   shipThree1: {
     length: 3,
-    location:[[],[],[]]
+    location:[]
   },
   shipThree2: {
     length: 3,
-    location:[[],[],[]]
+    location:[]
   },
   shipTwo: {
     length: 2,
-    location:[[],[]]
+    location:[]
   }
 };
 
+function setup(shipList) {
+  var HorV = getRandomInt(2); //1->horizontal 2->vertical
+  var rowcol = getRandomInt(10);
+  if (HorV === 2) { //2->v get col A-F
+    var index = rowcol + 65;
+    rowcol = String.fromCharCode(index);
+  }  //now I know which row or col my ship is
+  var first = getRandomInt(shipList.shipFive.length+1);
+  if (HorV === 1) {
+    var index = 65 + first - 1;
+    for (var i = 0; i < shipList.shipFive.length; i++) {
+      var col = String.fromCharCode(index + i);
+      var coordinate = rowcol + col;
+      shipList.shipFive.location.push(coordinate);
+    }
+  } else {
+    for (var i = 0; i < shipList.shipFive.length; i++) {
+      var row = first + i;
+      var coordinate = row + rowcol;
+      shipList.shipFive.location.push(coordinate);
+    }
+  }
+  return;
+}
 
 function startGame() {
 
+
+  for (var i = 0; i < cells.length; i++) {
+    cells[i].innerText = '';
+ //   cells[i].style.removeProperty('background-color');
+    cells[i].addEventListener('click', turnClick, false);
+  }
 }
-function turnClick(square) {
-  turn(square.target.id, huPlayer)
+
+function turnClick(grid) {
+  console.log(grid.target.id);
 }
 
 function turn(squareId, player) {
   origBoard[squareId] = player;
   document.getElementById(squareId).innerText = player;
 }
-cells[1].innerText = '';
-cells[1].addEventListener('click', turnClick, false);
