@@ -4,40 +4,72 @@ function instructionMsg() {
 function createTenByTenBoard(num) {
   var rowOpen = "<tr>\n";
   var rowClose = "</tr>\n";
-  var cellOpen = "<td class='cell' row=";
+  var cellOpen = "<td class='cell' id='";
   var cellClose = "'></td>\n";
   var tableContent = `<table class='table${num}'>\n`; //
-  for(var i = 0; i < 10; i++) {
+  for(var i = 1; i < 11; i++) {
     tableContent += rowOpen;
     for(var j = 0; j < 10; j++) {
       var row = cellOpen;
       row += i;
-      var col = " col='";
       var letter = String.fromCharCode(65+j);
-      row += col += letter;
+      row += letter;
       row += cellClose;
       tableContent += row;
     }
     tableContent += rowClose;
   }
   tableContent += "</table>\n";
+  console.log(tableContent);
   return tableContent;
 }
-var board1 = htmlToElement(createTenByTenBoard(1));
-var board2 = htmlToElement(createTenByTenBoard(2));
-document.getElementById("board1").appendChild(board1);
-document.getElementById("board2").appendChild(board2);
 function htmlToElement(html) {
     var template = document.createElement('template');
     html = html.trim(); // Never return a text node of whitespace as the result
     template.innerHTML = html;
     return template.content.firstChild; //in memory representation of DOM element
 }
-
+var board1 = htmlToElement(createTenByTenBoard(1));
+var board2 = htmlToElement(createTenByTenBoard(2));
+document.getElementById("board1").appendChild(board1);
+document.getElementById("board2").appendChild(board2);
+const cells = document.querySelectorAll('.cell');
 const hit = 'H';
 const miss = 'O';
-const ship = [5, 4, 3, 3, 2];
-const cells = document.querySelectorAll('.cell');
+var myShip = {
+  shipFive: {
+    length: 5,
+    location:[[],[],[],[],[]] //array of coordinate
+  },
+  shipFour: {
+    length: 4,
+    location:[[],[],[],[]]
+  },
+  shipThree1: {
+    length: 3,
+    location:[[],[],[]]
+  },
+  shipThree2: {
+    length: 3,
+    location:[[],[],[]]
+  },
+  shipTwo: {
+    length: 2,
+    location:[[],[]]
+  }
+};
+
 
 function startGame() {
+
 }
+function turnClick(square) {
+  turn(square.target.id, huPlayer)
+}
+
+function turn(squareId, player) {
+  origBoard[squareId] = player;
+  document.getElementById(squareId).innerText = player;
+}
+cells[1].innerText = '';
+cells[1].addEventListener('click', turnClick, false);
