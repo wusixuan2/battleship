@@ -34,9 +34,8 @@ var board2 = htmlToElement(createTenByTenBoard(2));
 document.getElementById("board1").appendChild(board1);
 document.getElementById("board2").appendChild(board2);
 const cells = document.querySelectorAll('.cell');
-const hit = 'H';
-const miss = 'O';
-var shipList = {
+
+var myShip = {
   shipFive: {
     length: 5,
     location:[] //array of coordinate 5 string
@@ -59,32 +58,89 @@ var shipList = {
   }
 };
 
-function setup(shipList) {
+var opShip = {
+  shipFive: {
+    length: 5,
+    location:[] //array of coordinate 5 string
+  },
+  shipFour: {
+    length: 4,
+    location:[] //array of 4 string
+  },
+  shipThree1: {
+    length: 3,
+    location:[]
+  },
+  shipThree2: {
+    length: 3,
+    location:[]
+  },
+  shipTwo: {
+    length: 2,
+    location:[]
+  }
+};
+
+const hit = 'H';
+const miss = 'O';
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max + 1);
+}
+
+function createShip(ship) {
   var HorV = getRandomInt(2); //1->horizontal 2->vertical
   var rowcol = getRandomInt(10);
   if (HorV === 2) { //2->v get col A-F
     var index = rowcol + 65;
     rowcol = String.fromCharCode(index);
   }  //now I know which row or col my ship is
-  var first = getRandomInt(shipList.shipFive.length+1);
+  var first = getRandomInt(ship.length+1);
   if (HorV === 1) {
     var index = 65 + first - 1;
-    for (var i = 0; i < shipList.shipFive.length; i++) {
+    for (var i = 0; i < ship.length; i++) {
       var col = String.fromCharCode(index + i);
       var coordinate = rowcol + col;
-      shipList.shipFive.location.push(coordinate);
+      ship.location.push(coordinate);
     }
   } else {
-    for (var i = 0; i < shipList.shipFive.length; i++) {
+    for (var i = 0; i < ship.length; i++) {
       var row = first + i;
       var coordinate = row + rowcol;
-      shipList.shipFive.location.push(coordinate);
+      ship.location.push(coordinate);
     }
   }
-  return;
+  return ship;
+}
+
+function overlap(occupied, location) {
+  for (var i in location) {
+    for (var j in occupied) {
+      if (location[i] === occupied[i]) {
+        return false;
+      }
+    }
+  }
+  return true; //false if overlap
+}
+
+function setup(shipList) {
+  var occupied = [];
+  for (var ship in shipList) {
+    while (true) {
+      var newShip = createShip(shipList[ship]);
+      if (overlap(occupied, shipList[ship].location)) {
+        break;
+      }
+    }
+    occupied.concat(newShip.location);
+  }
+  return shipList;
 }
 
 function startGame() {
+  setup(myShip);
+  setup(opShip);
 
 
   for (var i = 0; i < cells.length; i++) {
